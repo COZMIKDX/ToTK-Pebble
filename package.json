@@ -1,0 +1,35 @@
+{
+  "name": "TOTK",
+  "author": "MakeAwesomeHappen",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "TOTK",
+    "uuid": "1cbf4085-f5ba-464c-8708-aef730955045",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "WEATHER_BG",
+          "file": "weather_bg.png"
+        }
+      ]
+    }
+  }
+}
