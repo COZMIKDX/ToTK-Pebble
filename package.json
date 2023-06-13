@@ -1,6 +1,6 @@
 {
   "name": "TOTK",
-  "author": "MakeAwesomeHappen",
+  "author": "COZMIK",
   "version": "1.0.0",
   "keywords": ["pebble-app"],
   "private": true,
@@ -11,13 +11,10 @@
     "sdkVersion": "3",
     "enableMultiJS": true,
     "targetPlatforms": [
-      "aplite",
-      "basalt",
-      "chalk",
-      "diorite"
+      "basalt"
     ],
     "watchapp": {
-      "watchface": false
+      "watchface": true
     },
     "messageKeys": [
       "dummy"
@@ -28,6 +25,11 @@
           "type": "bitmap",
           "name": "WEATHER_BG",
           "file": "weather_bg.png"
+        },
+        {
+          "type": "font",
+          "name": "TIME_16",
+          "file": "OpenSans-Regular.ttf"
         }
       ]
     }
