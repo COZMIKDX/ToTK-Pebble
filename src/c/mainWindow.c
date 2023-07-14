@@ -60,9 +60,9 @@ static void window_load(Window *window)
     layer_add_child(window_layer, bitmap_layer_get_layer(bg_layer));
 
     // Time layer
-    time_font_16 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_16));
-    time_layer = text_layer_create(GRect(50, 112, 45, 20));
-    text_layer_set_background_color(time_layer, GColorClear);
+    time_font_16 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_24));
+    time_layer = text_layer_create(GRect(0, 0, 128, 100));
+    text_layer_set_background_color(time_layer, GColorBlack);
     text_layer_set_text_color(time_layer, GColorWhite);
     text_layer_set_font(time_layer, time_font_16);
     text_layer_set_text_alignment(time_layer, GTextAlignmentLeft);
