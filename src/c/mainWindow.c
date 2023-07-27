@@ -1,7 +1,9 @@
 #include <pebble.h>
 #include "mainWindow.h"
+#include "Images.h"
 
 #define NUMBER_OF_DIGITS 4
+#define NUMBER_OF_IMAGES 1
 static GBitmap *digits[NUMBER_OF_DIGITS];
 static BitmapLayer *digit_layers[NUMBER_OF_DIGITS];
 
@@ -12,6 +14,8 @@ static Window *s_window;
 static Layer *canvas;
 static GBitmap *bg;
 static BitmapLayer *bg_layer;
+
+struct Images * image_holder;
 
 
 static void canvas_update_proc(Layer *layer, GContext *ctx)
@@ -46,6 +50,7 @@ static void window_load(Window *window)
     // Get the layer for this window to put stuff on it.
     Layer *window_layer = window_get_root_layer(s_window);
     GRect window_bounds = layer_get_bounds(window_layer);
+    image_holder = init_images_struct(NUMBER_OF_IMAGES);
 
     // Setting up the layer I'll draw on. Probably won't use it.
     canvas = layer_create(window_bounds);
@@ -53,11 +58,12 @@ static void window_load(Window *window)
     layer_add_child(window_layer, canvas);
 
     // Setting up the background image
-    bg = gbitmap_create_with_resource(RESOURCE_ID_WEATHER_BG);
-    bg_layer = bitmap_layer_create(window_bounds);
-    bitmap_layer_set_compositing_mode(bg_layer, GCompOpSet);
-    bitmap_layer_set_bitmap(bg_layer, bg);
-    layer_add_child(window_layer, bitmap_layer_get_layer(bg_layer));
+    // bg = gbitmap_create_with_resource(RESOURCE_ID_WEATHER_BG);
+    // bg_layer = bitmap_layer_create(window_bounds);
+    // bitmap_layer_set_compositing_mode(bg_layer, GCompOpSet);
+    // bitmap_layer_set_bitmap(bg_layer, bg);
+    // layer_add_child(window_layer, bitmap_layer_get_layer(bg_layer));
+    add_image(image_holder, window_bounds, RESOURCE_ID_WEATHER_BG, window_layer);
 
     // Time layer
     time_font_16 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_24));
@@ -73,8 +79,8 @@ static void window_load(Window *window)
 void window_unload(Window *window)
 {
     gbitmap_destroy(bg);
-    bitmap_layer_destroy(bg_layer);
-
+    // bitmap_layer_destroy(bg_layer);
+    de_init_images_struct(image_holder);
     text_layer_destroy(time_layer);
 }
 
