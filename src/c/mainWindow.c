@@ -47,10 +47,18 @@ static void window_load(Window *window)
 
     // Setting images
     image_holder = init_images_struct(NUMBER_OF_IMAGES);
+    if (image_holder == NULL){
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to create image holder");
+        return;
+    }
     add_image(image_holder, window_bounds, RESOURCE_ID_WEATHER_BG, window_layer);
 
     // Text
     text_holder = init_texts_struct((uint32_t) 1, GColorWhite, GColorClear, RESOURCE_ID_TIME_24, window_layer);
+    if (text_holder == NULL){
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to create text holder");
+        return;
+    }
     add_text(text_holder, GRect(0,0,128,100), "00:00", window_layer);
 }
 
