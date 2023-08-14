@@ -1,22 +1,18 @@
 #include <pebble.h>
 #include "mainWindow.h"
+#include "Images.h"
+#include "Texts.h"
 
 #define NUMBER_OF_DIGITS 4
-static GBitmap *digits[NUMBER_OF_DIGITS];
-static BitmapLayer *digit_layers[NUMBER_OF_DIGITS];
-
-static TextLayer * time_layer;
-static GFont time_font_16;
+#define NUMBER_OF_IMAGES 1
 
 static Window *s_window;
 static Layer *canvas;
-static GBitmap *bg;
-static BitmapLayer *bg_layer;
 
+struct Images * image_holder;
+// struct Images * digit_image_holder;
+struct Texts * text_holder;
 
-static void canvas_update_proc(Layer *layer, GContext *ctx)
-{
-}
 
 // Get the time and update the time text layer.
 static void update_time() {
@@ -29,7 +25,7 @@ static void update_time() {
     strftime(buffer, sizeof(buffer), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
 
     // Change the text layer for time to reflect the current time.
-    text_layer_set_text(time_layer, buffer);
+    // update_text(text_holder->text_array[0], buffer)
 }
 
 // To be called when a tick happens. For this watchface, that'll be every minute.
@@ -47,35 +43,28 @@ static void window_load(Window *window)
     Layer *window_layer = window_get_root_layer(s_window);
     GRect window_bounds = layer_get_bounds(window_layer);
 
-    // Setting up the layer I'll draw on. Probably won't use it.
-    canvas = layer_create(window_bounds);
-    layer_set_update_proc(canvas, canvas_update_proc);
-    layer_add_child(window_layer, canvas);
+    // Setting images
+    image_holder = init_images_struct(NUMBER_OF_IMAGES);
+    if (image_holder == NULL){
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to create image holder");
+        return;
+    }
+    add_image(image_holder, window_bounds, RESOURCE_ID_WEATHER_BG, window_layer);
 
-    // Setting up the background image
-    bg = gbitmap_create_with_resource(RESOURCE_ID_WEATHER_BG);
-    bg_layer = bitmap_layer_create(window_bounds);
-    bitmap_layer_set_compositing_mode(bg_layer, GCompOpSet);
-    bitmap_layer_set_bitmap(bg_layer, bg);
-    layer_add_child(window_layer, bitmap_layer_get_layer(bg_layer));
-
-    // Time layer
-    time_font_16 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_TIME_24));
-    time_layer = text_layer_create(GRect(0, 0, 128, 100));
-    text_layer_set_background_color(time_layer, GColorBlack);
-    text_layer_set_text_color(time_layer, GColorWhite);
-    text_layer_set_font(time_layer, time_font_16);
-    text_layer_set_text_alignment(time_layer, GTextAlignmentLeft);
-    text_layer_set_text(time_layer, "00:00"); // temporary text until the tick handler runs
-    layer_add_child(window_layer, text_layer_get_layer(time_layer));
+    // Text
+    text_holder = init_texts_struct((uint32_t) 1, GColorWhite, GColorClear, RESOURCE_ID_TIME_24, window_layer);
+    if (text_holder == NULL){
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to create text holder");
+        return;
+    }
+    add_text(text_holder, GRect(65,0,128,100), "00:00", window_layer);
 }
 
 void window_unload(Window *window)
 {
-    gbitmap_destroy(bg);
-    bitmap_layer_destroy(bg_layer);
-
-    text_layer_destroy(time_layer);
+    de_init_images_struct(image_holder);
+    // de_init_images_struct(digit_image_holder);
+    destroy_texts_struct(text_holder);
 }
 
 void main_window_create(void)
