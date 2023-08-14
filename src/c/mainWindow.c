@@ -57,7 +57,7 @@ static void window_load(Window *window)
         APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to create text holder");
         return;
     }
-    add_text(text_holder, GRect(65,0,128,100), "00:00", window_layer);
+    add_text(text_holder, GRect(65,100,128,100), "00:00", window_layer);
 }
 
 void window_unload(Window *window)
