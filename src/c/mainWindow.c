@@ -12,6 +12,7 @@ static Layer *canvas;
 struct Images * image_holder;
 // struct Images * digit_image_holder;
 struct Texts * text_holder;
+struct Text * time_reference;
 
 
 // Get the time and update the time text layer.
@@ -25,7 +26,7 @@ static void update_time() {
     strftime(buffer, sizeof(buffer), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
 
     // Change the text layer for time to reflect the current time.
-    // update_text(text_holder->text_array[0], buffer)
+    update_text(time_reference, buffer);
 }
 
 // To be called when a tick happens. For this watchface, that'll be every minute.
@@ -57,12 +58,12 @@ static void window_load(Window *window)
         APP_LOG(APP_LOG_LEVEL_ERROR, "Failed to create text holder");
         return;
     }
-    add_text(text_holder, GRect(65,100,128,100), "00:00", window_layer);
+    time_reference = add_text(text_holder, GRect(65,100,128,100), "00:00", window_layer);
 }
 
 void window_unload(Window *window)
 {
-    de_init_images_struct(image_holder);
+    destroy_images_struct(image_holder);
     // de_init_images_struct(digit_image_holder);
     destroy_texts_struct(text_holder);
 }
